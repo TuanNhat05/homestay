@@ -1,4 +1,7 @@
 services:
+  # =========================
+  # BACKEND
+  # =========================
   - type: web
     name: homestay-backend
     runtime: node
@@ -6,24 +9,36 @@ services:
     rootDir: back_end
     buildCommand: npm install
     startCommand: node src/server.js
+
     envVars:
       - key: NODE_ENV
         value: production
+
       - key: MONGO_URL
         sync: false
+
       - key: JWT_SECRET
         sync: false
+
       - key: JWT_EXPIRES_IN
         value: 7d
+
       - key: ADMIN_NAME
         value: Admin
+
       - key: ADMIN_EMAIL
         sync: false
+
       - key: ADMIN_PASSWORD
         sync: false
+
       - key: FRONTEND_URL
         sync: false
 
+
+  # =========================
+  # FRONTEND
+  # =========================
   - type: web
     name: homestay-frontend
     runtime: static
@@ -31,9 +46,11 @@ services:
     rootDir: front_end
     buildCommand: npm install && npm run build
     staticPublishPath: dist
+
     envVars:
       - key: VITE_API_URL
         sync: false
+
     routes:
       - type: rewrite
         source: /*
