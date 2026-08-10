@@ -39,9 +39,9 @@ services:
   # =========================
   # FRONTEND
   # =========================
-  - type: static
+  - type: web
     name: homestay-frontend
-    plan: free
+    runtime: static
     rootDir: front_end
     buildCommand: npm install && npm run build
     staticPublishPath: dist
