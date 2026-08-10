@@ -99,7 +99,7 @@ const Layout = () => {
   );
 
   return (
-    <div className="min-h-screen bg-surface text-ink">
+    <div className="min-h-screen min-h-[100dvh] bg-surface text-ink overflow-x-hidden">
       {/* Desktop sidebar */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:block">{sidebar}</div>
 
@@ -111,13 +111,13 @@ const Layout = () => {
             onClick={() => setSidebarOpen(false)}
             aria-label="Đóng lớp phủ menu"
           />
-          <div className="relative h-full animate-slideIn">{sidebar}</div>
+          <div className="relative h-full max-w-[80vw] animate-slideIn">{sidebar}</div>
         </div>
       ) : null}
 
       {/* Main content */}
-      <div className="lg:pl-72">
-        <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-surface-border bg-surface/80 px-4 backdrop-blur-xl lg:px-6">
+      <div className="lg:pl-72 w-full overflow-x-hidden">
+        <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-surface-border bg-surface/80 px-3 backdrop-blur-xl sm:px-4 lg:px-6">
           <button
             className="icon-btn !h-9 !w-9 lg:hidden"
             onClick={() => setSidebarOpen(true)}
@@ -133,7 +133,7 @@ const Layout = () => {
             <span className="text-sm font-medium text-ink-muted">Online</span>
           </div>
         </header>
-        <main className="mx-auto w-full max-w-7xl px-4 py-6 lg:px-6">
+        <main className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6 lg:px-6 overflow-x-hidden">
           <Outlet />
         </main>
       </div>

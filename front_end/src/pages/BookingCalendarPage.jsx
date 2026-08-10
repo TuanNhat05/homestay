@@ -16,7 +16,8 @@ import {
 
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
 const HOUR_WIDTH = 80;
-const ROOM_COL_WIDTH = 180;
+const ROOM_COL_WIDTH_DESKTOP = 180;
+const ROOM_COL_WIDTH_MOBILE = 110;
 const LANE_HEIGHT = 38;
 const LANE_GAP = 4;
 const HEADER_HEIGHT = 34;
@@ -181,7 +182,7 @@ const BookingCalendarPage = () => {
         title="Lịch phòng"
         description="Xem trực quan lịch đặt phòng theo timeline."
         actions={
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
             {/* View mode toggle */}
             <div className="flex rounded-xl border border-surface-border overflow-hidden">
               <button
@@ -209,18 +210,20 @@ const BookingCalendarPage = () => {
             </div>
 
             {/* Date nav */}
-            <button className="icon-btn !h-9 !w-9" onClick={() => changeDate(-1)} aria-label="Trước">
-              <ChevronLeft size={16} />
-            </button>
-            <input
-              className="field !w-40 text-center text-sm"
-              type="date"
-              value={date}
-              onChange={(event) => setDate(event.target.value)}
-            />
-            <button className="icon-btn !h-9 !w-9" onClick={() => changeDate(1)} aria-label="Sau">
-              <ChevronRight size={16} />
-            </button>
+            <div className="flex items-center gap-2">
+              <button className="icon-btn !h-9 !w-9" onClick={() => changeDate(-1)} aria-label="Trước">
+                <ChevronLeft size={16} />
+              </button>
+              <input
+                className="field !w-32 sm:!w-40 text-center text-sm"
+                type="date"
+                value={date}
+                onChange={(event) => setDate(event.target.value)}
+              />
+              <button className="icon-btn !h-9 !w-9" onClick={() => changeDate(1)} aria-label="Sau">
+                <ChevronRight size={16} />
+              </button>
+            </div>
             {date !== today && (
               <button className="secondary-btn !h-9 text-xs" onClick={() => setDate(today)}>
                 Hôm nay
@@ -232,13 +235,13 @@ const BookingCalendarPage = () => {
       <FormMessage>{error}</FormMessage>
 
       {/* Top bar: date display + stats + legend */}
-      <div className="mb-4 flex flex-wrap items-center gap-4 animate-fadeIn">
+      <div className="mb-4 flex flex-wrap items-center gap-3 animate-fadeIn">
         {/* Date */}
-        <div className="flex items-center gap-2">
-          <Calendar size={18} className="text-pine" />
-          <span className="text-lg font-bold text-ink">{formatDate(date)}</span>
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <Calendar size={18} className="text-pine shrink-0" />
+          <span className="text-base sm:text-lg font-bold text-ink truncate">{formatDate(date)}</span>
           {isToday && (
-            <span className="inline-flex items-center gap-1 rounded-lg bg-pine/15 px-2 py-0.5 text-xs font-semibold text-pine">
+            <span className="inline-flex items-center gap-1 rounded-lg bg-pine/15 px-2 py-0.5 text-xs font-semibold text-pine shrink-0">
               <span className="h-1.5 w-1.5 rounded-full bg-pine animate-pulse-dot" />
               Hôm nay
             </span>
@@ -246,15 +249,15 @@ const BookingCalendarPage = () => {
         </div>
 
         {/* Quick stats */}
-        <div className="flex items-center gap-3 ml-auto">
-          <div className="flex items-center gap-1.5 rounded-xl bg-surface-card border border-surface-border px-3 py-1.5 text-xs">
+        <div className="flex items-center gap-2 sm:gap-3 sm:ml-auto">
+          <div className="flex items-center gap-1.5 rounded-xl bg-surface-card border border-surface-border px-2.5 py-1.5 text-xs">
             <BedDouble size={13} className="text-emerald-400" />
-            <span className="text-ink-muted">Trống:</span>
+            <span className="text-ink-muted hidden sm:inline">Trống:</span>
             <span className="font-bold text-emerald-400">{stats.freeRooms}</span>
           </div>
-          <div className="flex items-center gap-1.5 rounded-xl bg-surface-card border border-surface-border px-3 py-1.5 text-xs">
+          <div className="flex items-center gap-1.5 rounded-xl bg-surface-card border border-surface-border px-2.5 py-1.5 text-xs">
             <BedDouble size={13} className="text-amber-400" />
-            <span className="text-ink-muted">Có khách:</span>
+            <span className="text-ink-muted hidden sm:inline">Có khách:</span>
             <span className="font-bold text-amber-400">{stats.busyRooms}</span>
           </div>
         </div>
@@ -281,19 +284,172 @@ const BookingCalendarPage = () => {
       {/* ════════════ DAY VIEW ════════════ */}
       {viewMode === 'day' && (
         <div className="panel overflow-hidden animate-fadeIn">
-          <div className="overflow-x-auto">
-            <div style={{ minWidth: `${ROOM_COL_WIDTH + TIMELINE_WIDTH}px` }}>
-              {/* Header row */}
+          <p className="px-4 py-2 text-[10px] text-ink-dim sm:hidden border-b border-surface-border">← Lướt ngang để xem timeline →</p>
+          <div className="overflow-x-auto -webkit-overflow-scrolling-touch scroll-container">
+            <div style={{ minWidth: `${ROOM_COL_WIDTH_MOBILE + TIMELINE_WIDTH}px` }} className="sm:hidden">
+              {/* Header row - mobile */}
               <div className="flex border-b border-surface-border sticky top-0 z-10 bg-surface-card/95 backdrop-blur-md">
-                {/* Room column header */}
+                <div
+                  className="flex-shrink-0 flex items-center px-2 py-2 border-r border-surface-border text-[10px] font-semibold text-ink-dim uppercase tracking-wider"
+                  style={{ width: `${ROOM_COL_WIDTH_MOBILE}px` }}
+                >
+                  <BedDouble size={12} className="mr-1 text-pine" />
+                  Phòng
+                </div>
+                <div className="flex">
+                  {HOURS.map((h) => (
+                    <div
+                      key={h}
+                      className={`flex-shrink-0 flex items-center justify-center py-2 text-[10px] font-medium border-r border-surface-border/60 ${
+                        isToday && Math.floor(currentHourOffset) === h
+                          ? 'text-pine font-bold bg-pine/5'
+                          : 'text-ink-dim'
+                      }`}
+                      style={{ width: `${HOUR_WIDTH}px` }}
+                    >
+                      {String(h).padStart(2, '0')}h
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Room rows */}
+              {/* Mobile room rows */}
+              {dayData.map(({ room, bookings: roomBookings, laneMap, laneCount }) => {
+                const rowHeight = laneCount * LANE_HEIGHT + (laneCount - 1) * LANE_GAP + 16;
+                const hasBookings = roomBookings.length > 0;
+
+                return (
+                  <div
+                    key={room._id}
+                    className="flex border-b border-surface-border/60 group/row hover:bg-surface-hover/20 transition-colors"
+                  >
+                    {/* Room info (fixed left) */}
+                    <div
+                      className="flex-shrink-0 flex flex-col justify-center px-2 py-2 border-r border-surface-border"
+                      style={{ width: `${ROOM_COL_WIDTH_MOBILE}px`, minHeight: `${Math.max(rowHeight, 60)}px` }}
+                    >
+                      <div className="flex items-center gap-1.5">
+                        <div
+                          className={`h-2 w-2 rounded-full shrink-0 ${
+                            hasBookings ? 'bg-amber-400 shadow-[0_0_6px_rgba(251,191,36,0.4)]' : 'bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.4)]'
+                          }`}
+                        />
+                        <span className="font-semibold text-xs text-ink truncate">{room.roomName}</span>
+                      </div>
+                      <div className="text-[10px] text-ink-dim mt-0.5 ml-[14px] truncate">
+                        {room.capacity}p
+                      </div>
+                      {hasBookings && (
+                        <div className="mt-1.5 ml-[18px]">
+                          <span className="inline-flex items-center rounded-md bg-pine/10 px-1.5 py-0.5 text-[10px] font-semibold text-pine">
+                            {roomBookings.length} booking
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Timeline area */}
+                    <div className="relative flex-1" style={{ height: `${Math.max(rowHeight, 60)}px` }}>
+                      {/* Vertical grid lines */}
+                      <div className="absolute inset-0 flex pointer-events-none">
+                        {HOURS.map((h) => (
+                          <div
+                            key={h}
+                            className="flex-shrink-0 border-r border-surface-border/30"
+                            style={{ width: `${HOUR_WIDTH}px` }}
+                          />
+                        ))}
+                      </div>
+
+                      {/* Current time marker */}
+                      {isToday && currentHourOffset >= 0 && currentHourOffset <= 24 && (
+                        <div
+                          className="absolute top-0 bottom-0 z-20 w-[2px] bg-coral/80"
+                          style={{ left: `${currentHourOffset * HOUR_WIDTH}px` }}
+                        >
+                          <div className="absolute -top-0.5 -left-[3px] h-2 w-2 rounded-full bg-coral shadow-[0_0_8px_rgba(251,113,133,0.6)]" />
+                        </div>
+                      )}
+
+                      {/* Booking blocks */}
+                      {roomBookings.map((booking) => {
+                        let startH = Math.max(0, getHourOffset(booking.startTime, date));
+                        let endH = Math.min(24, getHourOffset(booking.endTime, date));
+                        if (endH <= startH) return null;
+
+                        const left = startH * HOUR_WIDTH;
+                        const width = (endH - startH) * HOUR_WIDTH;
+                        const color = bookingStatusColors[booking.status] || '#94a3b8';
+                        const isUsing = booking.status === 'using';
+                        const lane = laneMap.get(booking._id) || 0;
+                        const top = 8 + lane * (LANE_HEIGHT + LANE_GAP);
+
+                        return (
+                          <div
+                            key={booking._id}
+                            className="absolute z-10"
+                            style={{
+                              top: `${top}px`,
+                              left: `${left}px`,
+                              width: `${Math.max(width, 70)}px`,
+                              height: `${LANE_HEIGHT}px`,
+                            }}
+                          >
+                            <Link
+                              to={`/bookings/${booking._id}`}
+                              className="flex items-center gap-1.5 rounded-lg px-2 text-[10px] font-semibold h-full transition-all duration-200 hover:brightness-125 hover:shadow-lg cursor-pointer"
+                              style={{
+                                background: `linear-gradient(135deg, ${color}30, ${color}18)`,
+                                borderLeft: `3px solid ${color}`,
+                                color: color,
+                                boxShadow: `0 2px 8px ${color}15`,
+                              }}
+                            >
+                              {isUsing && (
+                                <span className="relative flex h-1.5 w-1.5 shrink-0">
+                                  <span
+                                    className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"
+                                    style={{ backgroundColor: color }}
+                                  />
+                                  <span
+                                    className="relative inline-flex h-1.5 w-1.5 rounded-full"
+                                    style={{ backgroundColor: color }}
+                                  />
+                                </span>
+                              )}
+                              <span className="truncate">{booking.customer?.name || 'N/A'}</span>
+                              <span className="ml-auto shrink-0 opacity-60 text-[9px] font-medium">
+                                {formatTime(booking.startTime)}-{formatTime(booking.endTime)}
+                              </span>
+                            </Link>
+                          </div>
+                        );
+                      })}
+
+                      {/* Empty state */}
+                      {roomBookings.length === 0 && (
+                        <div className="absolute inset-0 flex items-center px-2">
+                          <span className="text-[10px] text-ink-dim/60 italic">Trống</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Desktop version */}
+            <div style={{ minWidth: `${ROOM_COL_WIDTH_DESKTOP + TIMELINE_WIDTH}px` }} className="hidden sm:block">
+              {/* Header row - desktop */}
+              <div className="flex border-b border-surface-border sticky top-0 z-10 bg-surface-card/95 backdrop-blur-md">
                 <div
                   className="flex-shrink-0 flex items-center px-4 py-2 border-r border-surface-border text-xs font-semibold text-ink-dim uppercase tracking-wider"
-                  style={{ width: `${ROOM_COL_WIDTH}px` }}
+                  style={{ width: `${ROOM_COL_WIDTH_DESKTOP}px` }}
                 >
                   <BedDouble size={14} className="mr-2 text-pine" />
                   Phòng
                 </div>
-                {/* Hour headers */}
                 <div className="flex">
                   {HOURS.map((h) => (
                     <div
@@ -311,7 +467,7 @@ const BookingCalendarPage = () => {
                 </div>
               </div>
 
-              {/* Room rows */}
+              {/* Desktop room rows */}
               {dayData.map(({ room, bookings: roomBookings, laneMap, laneCount }) => {
                 const rowHeight = laneCount * LANE_HEIGHT + (laneCount - 1) * LANE_GAP + 16;
                 const hasBookings = roomBookings.length > 0;
@@ -321,10 +477,9 @@ const BookingCalendarPage = () => {
                     key={room._id}
                     className="flex border-b border-surface-border/60 group/row hover:bg-surface-hover/20 transition-colors"
                   >
-                    {/* Room info (fixed left) */}
                     <div
                       className="flex-shrink-0 flex flex-col justify-center px-4 py-3 border-r border-surface-border"
-                      style={{ width: `${ROOM_COL_WIDTH}px`, minHeight: `${Math.max(rowHeight, 60)}px` }}
+                      style={{ width: `${ROOM_COL_WIDTH_DESKTOP}px`, minHeight: `${Math.max(rowHeight, 60)}px` }}
                     >
                       <div className="flex items-center gap-2">
                         <div
@@ -346,7 +501,6 @@ const BookingCalendarPage = () => {
                       )}
                     </div>
 
-                    {/* Timeline area */}
                     <div className="relative flex-1" style={{ height: `${Math.max(rowHeight, 60)}px` }}>
                       {/* Vertical grid lines */}
                       <div className="absolute inset-0 flex pointer-events-none">
@@ -493,13 +647,13 @@ const BookingCalendarPage = () => {
       {/* ════════════ WEEK VIEW ════════════ */}
       {viewMode === 'week' && (
         <div className="panel overflow-hidden animate-fadeIn">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[900px]">
+          <div className="overflow-x-auto scroll-container">
+            <table className="w-full min-w-[700px]">
               <thead>
                 <tr className="bg-surface-card/80 backdrop-blur-md">
                   <th
                     className="sticky left-0 z-10 bg-surface-card/95 backdrop-blur-md border-b border-r border-surface-border px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ink-dim"
-                    style={{ width: `${ROOM_COL_WIDTH}px`, minWidth: `${ROOM_COL_WIDTH}px` }}
+                    style={{ width: `${ROOM_COL_WIDTH_DESKTOP}px`, minWidth: `${ROOM_COL_WIDTH_DESKTOP}px` }}
                   >
                     <div className="flex items-center gap-2">
                       <BedDouble size={14} className="text-pine" />
@@ -549,7 +703,7 @@ const BookingCalendarPage = () => {
                     {/* Room cell */}
                     <td
                       className="sticky left-0 z-[5] bg-surface-card/95 backdrop-blur-md border-b border-r border-surface-border px-4 py-3"
-                      style={{ width: `${ROOM_COL_WIDTH}px`, minWidth: `${ROOM_COL_WIDTH}px` }}
+                      style={{ width: `${ROOM_COL_WIDTH_DESKTOP}px`, minWidth: `${ROOM_COL_WIDTH_DESKTOP}px` }}
                     >
                       <div className="font-semibold text-sm text-ink truncate">{room.roomName}</div>
                       <div className="text-[11px] text-ink-dim">{room.roomType} • {room.capacity} người</div>

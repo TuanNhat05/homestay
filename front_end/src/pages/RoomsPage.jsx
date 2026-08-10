@@ -156,7 +156,7 @@ const RoomsPage = () => {
     <>
       <PageHeader title="Quản lý phòng" description="Danh sách phòng, giá theo giờ và trạng thái vận hành." />
 
-      <div className="grid gap-5 xl:grid-cols-[380px_1fr]">
+      <div className="grid gap-5 lg:grid-cols-[380px_1fr]">
         {/* Form */}
         <form className="panel p-5 h-fit" onSubmit={handleSubmit}>
           <h2 className="mb-4 text-base font-bold gradient-text">
@@ -331,7 +331,7 @@ const RoomsPage = () => {
         </form>
 
         {/* Room cards grid */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 stagger-children">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 stagger-children">
           {rooms.map((room) => (
             <div
               key={room._id}

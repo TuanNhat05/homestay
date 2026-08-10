@@ -143,13 +143,13 @@ const BookingFormPage = () => {
     <>
       <PageHeader title="Tạo booking" description="Chọn khách, phòng và số tiếng thuê." />
 
-      <form className="grid gap-5 xl:grid-cols-[1fr_360px]" onSubmit={handleSubmit}>
+      <form className="grid gap-5 grid-cols-1 lg:grid-cols-[1fr_320px]" onSubmit={handleSubmit}>
         <div className="panel p-5">
           <div className="mb-5">
             <FormMessage>{error}</FormMessage>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
             <div>
               <label className="label" htmlFor="booking-customer">Khách hàng</label>
               <select
@@ -199,8 +199,8 @@ const BookingFormPage = () => {
                     type="button"
                     onClick={() => selectPresetHours(h)}
                     className={`
-                      relative flex flex-col items-center justify-center rounded-xl border-2 px-5 py-3
-                      text-sm font-bold transition-all duration-200 cursor-pointer select-none
+                      relative flex flex-col items-center justify-center rounded-xl border-2 px-3 py-2 sm:px-5 sm:py-3
+                      text-sm font-bold transition-all duration-200 cursor-pointer select-none min-w-[52px]
                       ${form.durationHours === h
                         ? 'border-pine bg-pine/15 text-pine shadow-lg shadow-pine/10 scale-105'
                         : 'border-surface-border bg-surface-hover/30 text-ink-muted hover:border-pine/40 hover:bg-pine/5 hover:text-pine'
@@ -219,7 +219,7 @@ const BookingFormPage = () => {
               </div>
 
               {/* Custom hours input */}
-              <div className="mt-3 flex items-center gap-3">
+              <div className="mt-3 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
                 <span className="text-xs text-ink-dim whitespace-nowrap">Hoặc nhập số tiếng khác:</span>
                 <input
                   id="booking-custom-hours"
@@ -244,10 +244,10 @@ const BookingFormPage = () => {
                 <Calendar size={14} className="inline mr-1.5 -mt-0.5" />
                 Thời gian bắt đầu
               </label>
-              <div className="flex items-center gap-3 mt-1">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mt-1">
                 <input
                   id="booking-start-time"
-                  className="field !w-auto"
+                  className="field"
                   type="datetime-local"
                   step="900"
                   value={form.startTime}

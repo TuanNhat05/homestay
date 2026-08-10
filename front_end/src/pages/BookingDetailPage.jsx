@@ -102,12 +102,12 @@ const BookingDetailPage = () => {
         <FormMessage type="success">{message}</FormMessage>
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-[1fr_400px]">
+      <div className="grid gap-5 grid-cols-1 lg:grid-cols-[1fr_360px]">
         <div className="space-y-5">
           {/* Info cards */}
           <section className="panel p-5">
             <h2 className="mb-5 text-base font-bold gradient-text">Thông tin booking</h2>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {infoItems.map((item) => {
                 const Icon = item.icon;
                 return (
@@ -125,7 +125,7 @@ const BookingDetailPage = () => {
             </div>
 
             {/* Money section */}
-            <div className="mt-5 grid gap-4 sm:grid-cols-3">
+            <div className="mt-5 grid gap-3 grid-cols-1 sm:grid-cols-3">
               <div className="rounded-xl border border-surface-border bg-pine/5 p-4">
                 <div className="flex items-center gap-2 text-xs text-ink-dim">
                   <CreditCard size={13} />

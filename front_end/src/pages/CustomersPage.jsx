@@ -84,7 +84,7 @@ const CustomersPage = () => {
     <>
       <PageHeader title="Quản lý khách hàng" description="Lưu thông tin khách hỏi phòng qua fanpage hoặc điện thoại." />
 
-      <div className="grid gap-5 xl:grid-cols-[380px_1fr]">
+      <div className="grid gap-5 grid-cols-1 lg:grid-cols-[380px_1fr]">
         {/* Form */}
         <form className="panel p-5 h-fit" onSubmit={handleSubmit}>
           <h2 className="mb-4 text-base font-bold gradient-text">
@@ -146,7 +146,7 @@ const CustomersPage = () => {
         {/* Table */}
         <div>
           {/* Search */}
-          <div className="relative mb-4 max-w-sm">
+          <div className="relative mb-4">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-dim" />
             <input
               id="customer-search"
@@ -158,7 +158,52 @@ const CustomersPage = () => {
             />
           </div>
 
-          <div className="table-wrap">
+          {/* Mobile card list */}
+          <div className="space-y-3 md:hidden">
+            {filtered.map((customer) => (
+              <div
+                key={customer._id}
+                className="panel p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-glow"
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-ocean text-white text-xs font-bold">
+                    {customer.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="font-semibold text-sm text-ink truncate">{customer.name}</div>
+                    <div className="text-xs text-ink-muted">{customer.phone}</div>
+                  </div>
+                </div>
+                {customer.facebookName && (
+                  <div className="text-xs text-ink-muted mb-2">
+                    <span className="text-ink-dim">Facebook: </span>
+                    {customer.facebookName}
+                  </div>
+                )}
+                {customer.note && (
+                  <p className="text-xs text-ink-dim mb-3 line-clamp-2">{customer.note}</p>
+                )}
+                <div className="flex gap-2 border-t border-surface-border pt-3">
+                  <button className="secondary-btn flex-1 justify-center !h-8 text-xs" onClick={() => handleEdit(customer)}>
+                    <Pencil size={13} />
+                    Sửa
+                  </button>
+                  <button className="danger-btn !h-8 !px-3 text-xs" onClick={() => handleDelete(customer._id)}>
+                    <Trash2 size={13} />
+                  </button>
+                </div>
+              </div>
+            ))}
+            {filtered.length === 0 && (
+              <div className="panel p-8 text-center text-ink-dim">
+                <div className="text-3xl mb-2">👤</div>
+                {customers.length === 0 ? 'Chưa có khách hàng.' : 'Không tìm thấy khách hàng.'}
+              </div>
+            )}
+          </div>
+
+          {/* Desktop table */}
+          <div className="table-wrap hidden md:block">
             <table className="min-w-[700px] w-full">
               <thead className="table-head">
                 <tr>
