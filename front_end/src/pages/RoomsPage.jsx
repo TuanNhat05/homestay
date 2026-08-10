@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import api, { getErrorMessage } from '../api/client';
 import FormMessage from '../components/FormMessage';
 import PageHeader from '../components/PageHeader';
-import { useAuth } from '../context/AuthContext';
+
 import { formatCurrency } from '../utils/booking';
 
 const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
@@ -30,7 +30,7 @@ const statusColors = {
 };
 
 const RoomsPage = () => {
-  const { user } = useAuth();
+
   const [rooms, setRooms] = useState([]);
   const [form, setForm] = useState(initialForm);
   const [imageFile, setImageFile] = useState(null);
@@ -39,7 +39,7 @@ const RoomsPage = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const fileInputRef = useRef(null);
-  const isAdmin = user?.role === 'admin';
+  const isAdmin = true;
 
   const fetchRooms = async () => {
     const res = await api.get('/rooms');

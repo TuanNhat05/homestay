@@ -2,7 +2,6 @@ import {
   BedDouble,
   CalendarDays,
   Gauge,
-  LogOut,
   Menu,
   NotebookTabs,
   Users,
@@ -10,8 +9,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { useState } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { NavLink, Outlet } from 'react-router-dom';
 
 const navItems = [
   { to: '/', label: 'Dashboard', icon: Gauge },
@@ -23,13 +21,6 @@ const navItems = [
 
 const Layout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
 
   const sidebar = (
     <aside className="flex h-full w-72 flex-col bg-gradient-sidebar border-r border-surface-border">
@@ -90,23 +81,19 @@ const Layout = () => {
         })}
       </nav>
 
-      {/* User */}
+      {/* Footer */}
       <div className="border-t border-surface-border p-4">
-        <div className="mb-3 flex items-center gap-3">
+        <div className="flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-violet text-white text-sm font-bold">
-            {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+            S
           </div>
           <div className="min-w-0 flex-1">
-            <div className="truncate text-sm font-semibold text-ink">{user?.name}</div>
+            <div className="truncate text-sm font-semibold text-ink">Sun HomeStay</div>
             <div className="text-[10px] font-medium uppercase tracking-widest text-ink-dim">
-              {user?.role}
+              Quản lý
             </div>
           </div>
         </div>
-        <button className="secondary-btn w-full justify-center text-xs" onClick={handleLogout}>
-          <LogOut size={14} />
-          Đăng xuất
-        </button>
       </div>
     </aside>
   );
@@ -143,7 +130,7 @@ const Layout = () => {
           </div>
           <div className="flex items-center gap-2">
             <div className="h-2 w-2 rounded-full bg-pine animate-pulse-dot" />
-            <span className="text-sm font-medium text-ink-muted">{user?.name}</span>
+            <span className="text-sm font-medium text-ink-muted">Online</span>
           </div>
         </header>
         <main className="mx-auto w-full max-w-7xl px-4 py-6 lg:px-6">
@@ -155,3 +142,4 @@ const Layout = () => {
 };
 
 export default Layout;
+

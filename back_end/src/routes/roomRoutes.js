@@ -9,8 +9,6 @@ const {
   updateRoom,
   deleteRoom,
 } = require('../controllers/roomController');
-const protect = require('../middlewares/authMiddleware');
-const allowRoles = require('../middlewares/roleMiddleware');
 
 const router = express.Router();
 
@@ -47,12 +45,10 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
 });
 
-router.use(protect);
-
 router.get('/', getRooms);
-router.post('/', allowRoles('admin'), upload.single('image'), createRoom);
+router.post('/', upload.single('image'), createRoom);
 router.get('/:id', getRoomById);
-router.put('/:id', allowRoles('admin'), upload.single('image'), updateRoom);
-router.delete('/:id', allowRoles('admin'), deleteRoom);
+router.put('/:id', upload.single('image'), updateRoom);
+router.delete('/:id', deleteRoom);
 
 module.exports = router;

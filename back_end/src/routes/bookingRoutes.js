@@ -8,11 +8,8 @@ const {
   updateBookingStatus,
   addBookingNote,
 } = require('../controllers/bookingController');
-const protect = require('../middlewares/authMiddleware');
 
 const router = express.Router();
-
-router.use(protect);
 
 router.get('/', getBookings);
 router.post('/', createBooking);
@@ -23,3 +20,4 @@ router.patch('/:id/status', updateBookingStatus);
 router.post('/:id/notes', addBookingNote);
 
 module.exports = router;
+
